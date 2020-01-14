@@ -95,7 +95,7 @@ class User {
 				
 				default:
 
-					this[name] = json[name];
+					if (name.substring(0, 1) === "_") this[name] = json[name];
 
 					break;
 			}
@@ -106,49 +106,13 @@ class User {
 
 	static getUsersStorage() {
 
-		let users = [];
-
-		let sessionUsers = localStorage.getItem("users");
-
-		if (sessionUsers) {
-
-			users = JSON.parse(sessionUsers);
-
-		}
-
-		return users;
-
-	}
-
-	getNewId() {
-
-		let usersId = parseInt(localStorage.getItem("userId"));
-
-		if (!usersId > 0) usersId = 0;
-
-		usersId++;
-
-		localStorage.setItem("userId", usersId);
-
-		return usersId;
+		return Fetch.get(`/users`);
 
 	}
 
 	remove() {
 
-		let users = User.getUsersStorage();
-
-		users.forEach((userData, index) => {
-
-			if (this._id == userData._id) {
-
-				users.splice(index, 1);
-
-			}
-
-		});
-
-		localStorage.setItem("users", JSON.stringify(users));
+		return Fetch.delete(`/users/${ this.id }`);
 
 	}
 
@@ -174,11 +138,11 @@ class User {
 
 			if (this.id) {
 
-				promisse = HttpRequest.put(`/users/${ this.id }`, this.toJSON());
+				promisse = Fetch.put(`/users/${ this.id }`, this.toJSON());
 
 			} else {
 
-				promisse = HttpRequest.post(`/users`, this.toJSON());
+				promisse = Fetch.post(`/users`, this.toJSON());
 
 			}
 

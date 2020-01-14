@@ -44,9 +44,9 @@ module.exports = app => {
 
 	route.post([
 
-			check("name").notEmpty(),
+			check("_name").notEmpty(),
 
-			check("senha").notEmpty()
+			check("_password").notEmpty()
 
 		], (req, res) => {
 
